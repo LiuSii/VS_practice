@@ -32,7 +32,7 @@ void glut::Initial() {
 
 	for (int i = 0; i < result1.pointNumber; i++) {
 		//DrawPoint(result1.pointList[i]);
-		DrawLine(result1.pointList[i], result1.pointList[i], 1);
+		DrawLine(result1.pointList[i], result1.pointList[i], 1);  // 画点函数和画线函数有偏差，统一用画线
 	}
 	for (int i = 0; i < result1.lineNumber; i++) {
 		DrawLine(result1.linePoint1[i], result1.linePoint2[i], 0);
@@ -42,6 +42,7 @@ void glut::Initial() {
 void glut::DrawPoint(Point point) {
 	glColor3f(1.0, 1.0, 1.0);  // 白色
 	glPointSize(10.0);  // 大小
+	// x和y值规格化于-0.5至0.5区间
 	float x = ((float)point.x) / Width - 0.5;
 	float y = ((float)point.y) / Width - 0.5;
 
@@ -57,6 +58,8 @@ void glut::DrawPoint(Point point) {
 void glut::DrawLine(Point point1, Point point2, int flag) {
 	glColor3f(1.0, 1.0, 1.0);  // 白色
 	glLineWidth(10.0);  // 线宽
+
+	// x和y值规格化于-0.5至0.5区间
 	float x1 = ((float)point1.x) / Width - 0.5;
 	float y1 = ((float)point1.y) / Width - 0.5;
 	float x2 = ((float)point2.x) / Width - 0.5;

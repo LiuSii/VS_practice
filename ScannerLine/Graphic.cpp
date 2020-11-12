@@ -15,7 +15,7 @@ Graphic :: Graphic() {
 
 	// 读入图形中的点
 	FILE *fp;
-	fopen_s(&fp, "point.txt", "r");
+	fopen_s(&fp, "point.txt", "r");  // 读入的文件为多个边，一条边一行
 	while (!feof(fp)) {
 		memset(lineChar, 0, sizeof(lineChar));
 		fgets(lineChar, sizeof(lineChar) - 1, fp);  // 删除最后的换行符
@@ -48,7 +48,9 @@ Graphic :: Graphic() {
 	fclose(fp);
 }
 
+
 result Graphic::Filling() {
+	// 填充函数，用于ET表演化
 	Edge* fontEdge = (Edge*)malloc(sizeof(Edge));  // 头结点
 	fontEdge->next = NULL;
 	Edge* p;
@@ -60,7 +62,7 @@ result Graphic::Filling() {
 	result2.lineNumber = 0;
 
 	float fillX1, fillX2;  // 填充的起点和终点
-	int fillXLock = 0;
+	int fillXLock = 0;  // 填充锁
 	int fillEnable = 0;
 
 	for (int i = 0; i <= scannerNumber; i++) {
@@ -96,14 +98,26 @@ result Graphic::Filling() {
 			p->next = r;
 		}
 
+		// 输出当前AET
+		p = fontEdge;
+		std::cout << i <<":  ";
+		while (p->next != NULL) {
+			std::cout << "|" << p->next->yMax << "|" << p->next->xDown << "|" << p->next->dx << "|";
+			if (p->next->next != NULL) {
+				std::cout << "--------->";
+			}
+			p = p->next;
+		}
+		std::cout << "\n";
+
 		// 填充
 		p = fontEdge;
 		while (p->next != NULL) {
-			if (p->next->dx == INT_MAX) {  // 去除平行线
+			if (p->next->dx == INT_MAX) {  // 直接去除水平线
 				p->next = p->next->next;
 				continue;
 			}
-			if (fillXLock == 0) {
+			if (fillXLock == 0) {  // 以Lock标志是线段顶点还是末端，进行记录
 				fillX1 = p->next->xDown;
 				fillXLock = 1;
 			} else {
@@ -115,7 +129,7 @@ result Graphic::Filling() {
 				result2.linePoint1[result2.lineNumber].x = fillX1;
 				result2.linePoint1[result2.lineNumber].y = i;
 				result2.linePoint2[result2.lineNumber].x = fillX2;
-				result2.linePoint2[result2.lineNumber].y = i;\
+				result2.linePoint2[result2.lineNumber].y = i;
 				result2.lineNumber++;
 
 				fillEnable = 0;
@@ -123,7 +137,7 @@ result Graphic::Filling() {
 			p = p->next;
 		}
 
-		// 更新
+		// 更新AET
 		p = fontEdge;
 		while (p->next != NULL) {
 			p->next->xDown = p->next->xDown + p->next->dx;  // x增长

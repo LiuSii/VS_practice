@@ -18,7 +18,7 @@ void Edge :: forXDown(Point point1, Point point2) {
 }
 
 void Edge :: forDx(Point point1, Point point2) {
-	if (point1.y == point2.y) {  // 平行线情况
+	if (point1.y == point2.y) {  // 水平线情况，将dx置为无穷大
 		this->dx = INT_MAX;
 	} else {
 		this->dx = (float)(point1.x - point2.x) / (float)(point1.y - point2.y);
