@@ -9,6 +9,10 @@ class Edge {
 		float dx;   // (dx)/(dy)
 		Edge* next;
 
+		// 专门处理水平线的几个属性
+		float xMin;
+		float xMax;
+
 	public:
 		// 分别求取边节点的值
 		void forYMax(Point point1, Point point2);

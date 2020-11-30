@@ -6,7 +6,7 @@
 #include "glut.h"
 #include "struct.h"
 
-#define scannerNumber 5// 扫描线数量
+#define scannerNumber 9// 扫描线数量
 
 class Graphic {
 	public:
@@ -16,4 +16,3 @@ class Graphic {
 		Graphic();  // 构造函数，生成初始化ET表
 		result Filling();  // 填充函数
 };
-

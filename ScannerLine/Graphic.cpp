@@ -7,7 +7,7 @@
 #include "glut.h"
 #include "struct.h"
 
-#define scannerNumber 5// 扫描线数量
+#define scannerNumber 9// 扫描线数量
 
 Graphic :: Graphic() {
 	char lineChar[100] = { '/0' };
@@ -15,7 +15,7 @@ Graphic :: Graphic() {
 
 	// 读入图形中的点
 	FILE *fp;
-	fopen_s(&fp, "point.txt", "r");  // 读入的文件为多个边，一条边一行
+	fopen_s(&fp, "point3.txt", "r");  // 读入的文件为多个边，一条边一行
 	while (!feof(fp)) {
 		memset(lineChar, 0, sizeof(lineChar));
 		fgets(lineChar, sizeof(lineChar) - 1, fp);  // 删除最后的换行符
@@ -32,6 +32,17 @@ Graphic :: Graphic() {
 				linkEdge->forYMax(linkPoint1, linkPoint2);  // 求yMax
 				linkEdge->forXDown(linkPoint1, linkPoint2);  // 求xDown
 				linkEdge->forDx(linkPoint1, linkPoint2);  // 求Dx
+
+				// 如果是水平线则补充最大最小x值
+				if (linkEdge->dx == INT_MAX) {
+					if (linkPoint1.x > linkPoint2.x) {
+						linkEdge->xMin = linkPoint2.x;
+						linkEdge->xMax = linkPoint1.x;
+					} else {
+						linkEdge->xMin = linkPoint1.x;
+						linkEdge->xMax = linkPoint2.x;
+					}
+				}
 				
 				// 将边结点挂载在扫描线上
 				if (i == linkEdge->forYMin(linkPoint1, linkPoint2)) {
@@ -47,7 +58,6 @@ Graphic :: Graphic() {
 	}
 	fclose(fp);
 }
-
 
 result Graphic::Filling() {
 	// 填充函数，用于ET表演化
@@ -73,6 +83,7 @@ result Graphic::Filling() {
 				result2.pointList[result2.pointNumber].x = p->next->xDown;
 				result2.pointList[result2.pointNumber].y = i;
 				result2.pointNumber++;
+
 				p->next = p->next->next;
 			} else {
 				p = p->next;
@@ -113,7 +124,13 @@ result Graphic::Filling() {
 		// 填充
 		p = fontEdge;
 		while (p->next != NULL) {
-			if (p->next->dx == INT_MAX) {  // 直接去除水平线
+			if (p->next->dx == INT_MAX) {  // 水平线去除、填充
+				result2.linePoint1[result2.lineNumber].x = p->next->xMin;
+				result2.linePoint1[result2.lineNumber].y = i;
+				result2.linePoint2[result2.lineNumber].x = p->next->xMax;
+				result2.linePoint2[result2.lineNumber].y = i;
+				result2.lineNumber++;
+
 				p->next = p->next->next;
 				continue;
 			}

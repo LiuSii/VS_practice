@@ -6,8 +6,8 @@
 #include "Point.h"
 #include "struct.h"
 
-#define Width 7
-#define High 7
+#define Width 9
+#define High 9
 
 glut::glut(int argc, char* argv[]) {
 	glutInit(&argc, argv);  // 使用glut库需要进行初始化
@@ -41,7 +41,7 @@ void glut::Initial() {
 
 void glut::DrawPoint(Point point) {
 	glColor3f(1.0, 1.0, 1.0);  // 白色
-	glPointSize(10.0);  // 大小
+	glPointSize(20.0);  // 大小
 	// x和y值规格化于-0.5至0.5区间
 	float x = ((float)point.x) / Width - 0.5;
 	float y = ((float)point.y) / Width - 0.5;
