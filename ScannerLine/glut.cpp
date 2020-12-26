@@ -23,8 +23,8 @@ glut::glut(int argc, char* argv[]) {
 void glut::Initial() {
 	result result1;
 
-	Graphic graphic;  // 初始化
-	result1 = graphic.Filling();
+	//Graphic graphic;  // 初始化
+	//result1 = graphic.Filling();
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);

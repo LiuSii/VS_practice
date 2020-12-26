@@ -8,17 +8,20 @@
 #include "struct.h"
 #include "windows.h"
 
-#define scannerNumber 9// 扫描线数量
+using namespace std;
 
-Graphic :: Graphic() {
-	char lineChar[100] = { '/0' };
+#define scannerNumber 400// 扫描线数量
+
+Graphic :: Graphic(Point array[], int number) {
+	//char lineChar[100] = { '/0' };
 	Edge* p;
 
-	// 获取图形
 	
-
-
+	// 获取图形
 	// 读入图形中的点
+
+	// 文件点集读入
+	/*
 	FILE *fp;
 	fopen_s(&fp, "point4.txt", "r");  // 读入的文件为多个边，一条边一行
 	while (!feof(fp)) {
@@ -62,7 +65,57 @@ Graphic :: Graphic() {
 		}
 	}
 	fclose(fp);
+	*/
+
+	// 选取读入
+	for (int j = 0; j < number; j++) {
+
+		// 提取两点创建边表
+		Point linkPoint1(0, 0);
+		Point linkPoint2(0, 0);
+		linkPoint1 = array[j];
+		if (j == number - 1) {
+			linkPoint2 = array[0];
+		} else {
+			linkPoint2 = array[j + 1];
+		}
+
+		// 扫描线两点转线段，建立边表
+		for (int i = 0; i <= scannerNumber; i++) {
+			if ((i == linkPoint1.y) || (i == linkPoint2.y)) {
+				Edge* linkEdge = (Edge*)malloc(sizeof(Edge));
+				linkEdge->next = NULL;
+
+				linkEdge->forYMax(linkPoint1, linkPoint2);  // 求yMax
+				linkEdge->forXDown(linkPoint1, linkPoint2);  // 求xDown
+				linkEdge->forDx(linkPoint1, linkPoint2);  // 求Dx
+
+				// 如果是水平线则补充最大最小x值
+				if (linkEdge->dx == INT_MAX) {
+					if (linkPoint1.x > linkPoint2.x) {
+						linkEdge->xMin = linkPoint2.x;
+						linkEdge->xMax = linkPoint1.x;
+					} else {
+						linkEdge->xMin = linkPoint1.x;
+						linkEdge->xMax = linkPoint2.x;
+					}
+				}
+
+				// 将边结点挂载在扫描线上
+				if (i == linkEdge->forYMin(linkPoint1, linkPoint2)) {
+					p = &this->edgeStruct[i];
+					while (p->next != NULL) {
+						p = p->next;
+					}
+					p->next = linkEdge;
+				}
+				break;
+			}
+		}
+	}
+	cout << "1" << endl;
 }
+
 
 result Graphic::Filling() {
 	// 填充函数，用于ET表演化
@@ -105,8 +158,13 @@ result Graphic::Filling() {
 		while (q->next != NULL) {
 			// 从小到大排列结点
 			p = fontEdge;
-			while (p->next != NULL && q->next->xDown > p->next->xDown) {  
+			while ((p->next != NULL) && (q->next->xDown > p->next->xDown)) {
 				p = p->next;
+			}
+			if (p->next != NULL) {
+				if ((q->next->xDown == p->next->xDown) && (q->next->dx > p->next->dx)) { // 若相等判断dx大小，小的放前面
+					p = p->next;
+				}
 			}
 			r = q->next;
 			q->next = q->next->next;
@@ -116,15 +174,18 @@ result Graphic::Filling() {
 
 		// 输出当前AET
 		p = fontEdge;
-		std::cout << i <<":  ";
+		int printFlag = 0; // 输出本行标志位，为1时输出本行
 		while (p->next != NULL) {
-			std::cout << "|" << p->next->yMax << "|" << p->next->xDown << "|" << p->next->dx << "|";
+			printFlag = 1;
+			std::cout << i << ":" << "|" << p->next->yMax << "|" << p->next->xDown << "|" << p->next->dx << "|";
 			if (p->next->next != NULL) {
 				std::cout << "--------->";
 			}
 			p = p->next;
 		}
-		std::cout << "\n";
+		if (printFlag == 1) {
+			std::cout << "\n";
+		}
 
 		// 填充
 		p = fontEdge;
@@ -167,5 +228,5 @@ result Graphic::Filling() {
 			p = p->next;
 		}
 	}
-	return result2;
+ 	return result2;
 }

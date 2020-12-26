@@ -6,13 +6,13 @@
 #include "glut.h"
 #include "struct.h"
 
-#define scannerNumber 9// 扫描线数量
+#define scannerNumber 400// 扫描线数量
 
 class Graphic {
 	public:
 		Edge edgeStruct[scannerNumber] = { 0, 0, 0, NULL };  // 结构
 
 	public:
-		Graphic();  // 构造函数，生成初始化ET表
+		Graphic(Point array[], int number);  // 构造函数，生成初始化ET表
 		result Filling();  // 填充函数
 };
