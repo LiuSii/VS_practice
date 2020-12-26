@@ -6,6 +6,7 @@
 #include "gl\glut.h"
 #include "glut.h"
 #include "struct.h"
+#include "windows.h"
 
 #define scannerNumber 9// 扫描线数量
 
@@ -13,9 +14,13 @@ Graphic :: Graphic() {
 	char lineChar[100] = { '/0' };
 	Edge* p;
 
+	// 获取图形
+	
+
+
 	// 读入图形中的点
 	FILE *fp;
-	fopen_s(&fp, "point3.txt", "r");  // 读入的文件为多个边，一条边一行
+	fopen_s(&fp, "point4.txt", "r");  // 读入的文件为多个边，一条边一行
 	while (!feof(fp)) {
 		memset(lineChar, 0, sizeof(lineChar));
 		fgets(lineChar, sizeof(lineChar) - 1, fp);  // 删除最后的换行符
