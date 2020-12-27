@@ -113,7 +113,6 @@ Graphic :: Graphic(Point array[], int number) {
 			}
 		}
 	}
-	cout << "1" << endl;
 }
 
 

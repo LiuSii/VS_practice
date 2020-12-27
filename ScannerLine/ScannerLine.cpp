@@ -161,7 +161,6 @@ void display() {
 }
 
 int main(int argc, char* argv[]){
-	cout << "test" << endl;
 
 	//初始化GL
 	glutInit(&argc, argv);
